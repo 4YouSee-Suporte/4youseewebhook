@@ -71,5 +71,8 @@ def insert_records(conta, data):
             records += 1
         except IntegrityError as e:
             pass
+        except Exception as e:
+            print('Error: ', e)
+            pass
         i -= 1
     return records
