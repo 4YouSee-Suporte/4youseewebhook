@@ -28,6 +28,8 @@ def home(request):
                 # se a conta não existe, é criado um registro de conta no bd
                 conta = Account.objects.create(name=name_account.capitalize())
                 records = insert_records(conta, data)
+            except Exception as e:
+                print('Error: ', e)
             return HttpResponse(
                 f'{records} Registros inseridos com sucesso! na conta {conta.name}')
         else:
@@ -38,5 +40,3 @@ def home(request):
     else:
         # print(request.__dict__)
         return render(request, 'base/index.html', context={'lines': data})
-
-
