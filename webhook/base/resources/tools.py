@@ -59,16 +59,17 @@ def name_of_account(url):
 
 def insert_records(conta, data):
     records = 0
-    try:
-        for one_data in data:
+    i = len(data) - 1
+    while i:
+        try:
+            one_data = data[i]
             record_line = Register(nickname=one_data['account'], date=one_data['date'],
-                                   time=one_data['time'],
-                                   player_id=one_data['playerId'], media_id=one_data['mediaId'],
-                                   media_type=one_data['type'])
+                                   time=one_data['time'], player_id=one_data['playerId'],
+                                   media_id=one_data['mediaId'], media_type=one_data['type'])
             record_line.save()
             conta.register.add(record_line)
             records += 1
-        return records
-    except IntegrityError as e:
-        pass
+        except IntegrityError as e:
+            pass
+        i -= 1
     return records
