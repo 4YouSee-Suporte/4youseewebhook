@@ -22,7 +22,7 @@ def home(request):
             name_account = name_of_account(content['url'])
             try:
                 # Se a conta consultada existe no banco a atribuição não da erro
-                conta = Account.objects.get(name__contains=name_account)
+                conta = Account.objects.get(name__contains=name_account.capitalize())
                 records = insert_records(conta, data)
             except Account.DoesNotExist:
                 # se a conta não existe, é criado um registro de conta no bd
