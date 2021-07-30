@@ -3,11 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <title>WebHook 4YouSee</title>
+    <style>
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: #111;
+      font-weight: 400;
+      font-family: Helvetica, sans-serif;
+    }
+
+    h1 {
+      font-size: 48px;
+    }
+
+    h2 {
+      font-size: 44px;
+    }
+
+    h3 {
+      font-size: 26px;
+    }
+
+    h4 {
+      font-size: 20px;
+    }
+
+    h5 {
+      font-size: 18px;
+    }
+
+    h6 {
+      font-size: 14px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+
+    strong {
+      font-weight: 400;
+    }
+    #records {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 60%;
+    }
+
+    #records td, #records th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #records tr:nth-child(even){background-color: #f2f2f2;}
+
+    #records tr:hover {background-color: #ddd;}
+
+    #records th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    }
+
+
+    </style>
 </head>
 <body>
-    <h4>Relatórios </h4>
-    {% for line in lines %}
-    <p>{{ line }}</p>
-    {% endfor %}
+<h1>WebHook 4YouSee</h1>
+{% if records%}
+<h3>Registros Existentes: {{ records|length }}</h3>
+{% if contas %}
+{% for conta in contas %} <p> {{ conta.name }}</p> {% endfor %}
+<p>
+<p>
+<div style="overflow-x:auto;">
+    <table id="records">
+        <thead>
+        <tr>
+            <th align="center">Conta</th>
+            <th align="center">Date</th>
+            <th align="center">Time</th>
+            <th align="center">Player</th>
+            <th align="center">Media</th>
+            <th align="center">Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for registro in records %}
+        <tr>
+            <td align="center">{{ registro.nickname }}</td>
+            <td>{{ registro.date }}</td>
+            <td>{{ registro.time }}</td>
+            <td>{{ registro.player_id }}</td>
+            <td>{{ registro.media_id }}</td>
+            <td>{{ registro.media_type }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<h4>No há registros</h4>
+{% endif%}
 </body>
 </html>

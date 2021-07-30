@@ -5,7 +5,7 @@ import json
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 
-from webhook.base.models import Account
+from webhook.base.models import Account, Register
 from webhook.base.resources.tools import download_gz, process_file, bytes_to_dict, name_of_account, insert_records
 
 
@@ -39,4 +39,6 @@ def home(request):
                 f"\n\t{content['filter']['startTime']} - {content['filter']['endTime']}\n\tPlayers: {content['filter']['playerId']}\n\tConteúdos: {content['filter']['mediaId']}")
     else:
         # print(request.__dict__)
-        return render(request, 'base/index.html', context={'lines': data})
+        registro = Register.objects.all().order_by('date', 'time')
+        contas = Account.objects.all()
+        return render(request, 'base/index.html', context={'records': registro, 'contas': contas})
