@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>WebHook 4YouSee</title>
     <style>
+    p,
     h1,
     h2,
     h3,
@@ -46,22 +47,22 @@
     strong {
       font-weight: 400;
     }
-    #records {
+    #tabela {
       font-family: Arial, Helvetica, sans-serif;
       border-collapse: collapse;
       width: 60%;
     }
 
-    #records td, #records th {
+    #tabela td, #tabela th {
       border: 1px solid #ddd;
       padding: 8px;
     }
 
-    #records tr:nth-child(even){background-color: #f2f2f2;}
+    #tabela tr:nth-child(even){background-color: #f2f2f2;}
 
-    #records tr:hover {background-color: #ddd;}
+    #tabela tr:hover {background-color: #ddd;}
 
-    #records th {
+    #tabela th {
       padding-top: 12px;
       padding-bottom: 12px;
       text-align: left;
@@ -70,18 +71,16 @@
     }
 
 
+
     </style>
 </head>
 <body>
 <h1>WebHook 4YouSee</h1>
-{% if records%}
-<h3>Registros Existentes: {{ records|length }}</h3>
-{% if contas %}
-{% for conta in contas %} <p> {{ conta.name }}</p> {% endfor %}
-<p>
-<p>
+{% for conta in contas %}
+<h4>Conta: <a href="{{ conta.url }}" target="_blank">{{ conta.url }}</a></h4>
+{% if conta.records %}
 <div style="overflow-x:auto;">
-    <table id="records">
+    <table id="tabela">
         <thead>
         <tr>
             <th align="center">Conta</th>
@@ -92,22 +91,25 @@
             <th align="center">Type</th>
         </tr>
         </thead>
+        {% for record in conta.records.all %}
         <tbody>
-        {% for registro in records %}
         <tr>
-            <td align="center">{{ registro.nickname }}</td>
-            <td>{{ registro.date }}</td>
-            <td>{{ registro.time }}</td>
-            <td>{{ registro.player_id }}</td>
-            <td>{{ registro.media_id }}</td>
-            <td>{{ registro.media_type }}</td>
+            <td align="center">{{ record.nickname }}</td>
+            <td>{{ record.date }}</td>
+            <td>{{ record.time }}</td>
+            <td>{{ record.player_id }}</td>
+            <td>{{ record.media_id }}</td>
+            <td>{{ record.media_type }}</td>
         </tr>
-        {% endfor %}
+
         </tbody>
+        {% endfor %}
     </table>
 </div>
 {% else %}
-<h4>No há registros</h4>
-{% endif%}
+<p>Não há logs de operações registrados.</p>
+{% endif %}
+{% endfor %}
+
 </body>
 </html>
