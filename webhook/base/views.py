@@ -5,8 +5,9 @@ import json
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 
-from webhook.base.models import Account, Register
-from webhook.base.resources.tools import download_gz, process_file, bytes_to_dict, name_of_account, insert_records
+from webhook.base.models import Account
+from webhook.base.resources.tools import download_gz, process_file, bytes_to_dict, name_of_account, insert_records, \
+    build_url
 
 
 @csrf_exempt
@@ -22,11 +23,12 @@ def home(request):
             name_account = name_of_account(content['url'])
             try:
                 # Se a conta consultada existe no banco a atribuição não da erro
-                conta = Account.objects.get(name__contains=name_account.capitalize())
+                conta = Account.objects.get(name__contains=name_account.split('-')[0].capitalize())
                 records = insert_records(conta, data)
             except Account.DoesNotExist:
                 # se a conta não existe, é criado um registro de conta no bd
-                conta = Account.objects.create(name=name_account.capitalize())
+                conta = Account.objects.create(name=name_account.split('-')[0].capitalize(),
+                                               url=build_url(name_account))
                 records = insert_records(conta, data)
             except Exception as e:
                 print('Error: ', e)
@@ -39,6 +41,5 @@ def home(request):
                 f"\n\t{content['filter']['startTime']} - {content['filter']['endTime']}\n\tPlayers: {content['filter']['playerId']}\n\tConteúdos: {content['filter']['mediaId']}")
     else:
         # print(request.__dict__)
-        registro = Register.objects.all().order_by('date', 'time')
-        contas = Account.objects.all()
-        return render(request, 'base/index.html', context={'records': registro, 'contas': contas})
+        # registro = Register.objects.all().order_by('date', 'time')
+        return render(request, 'base/index.html', context={'contas': Account.objects.all()})
