@@ -1,11 +1,5 @@
 import gzip
-import datetime
 import io
-import json
-from os import path
-from pathlib import Path
-import os
-from zipfile import ZipFile
 
 import requests
 from django.db import IntegrityError
@@ -50,24 +44,31 @@ def download_gz(url):
 
 def name_of_account(url):
     """
-    Recebe o nome da aconte que vem do relatório e retorna o nome só.
-    Trata e se vem com o formato 'name' ou 'name-token'
+    Recebe o nome da conta que vem do relatório e retorna o nome só.
+    reconhece ele se vem com o formato 'name' ou 'name-token'
+    param: 'https://4yousee-playlogs-reports.s3.amazonaws.com/alfareiza-3385E2/158591-6102de52c5e5f.gz': str
+    return: 'alfareiza-3385E2': str
     """
     if url:
-        return url.split('/')[3].split('-')[0]
+        return (url.split('/')[3])
 
 
 def insert_records(conta, data):
+    """
+    Recebe o objeto e inseri a data no banco de dados. A data são os logs de exibições recebidos do manager.
+    param: conta : Account:
+            data: list of dicts:
+    return: records: int: Quantidade de registros inseridos
+    """
     records = 0
     i = len(data) - 1
     while i:
         try:
             one_data = data[i]
-            record_line = Register(nickname=one_data['account'], date=one_data['date'],
-                                   time=one_data['time'], player_id=one_data['playerId'],
-                                   media_id=one_data['mediaId'], media_type=one_data['type'])
-            record_line.save()
-            conta.register.add(record_line)
+            record_line = Register.objects.create(nickname=one_data['account'], date=one_data['date'],
+                                                  time=one_data['time'], player_id=one_data['playerId'],
+                                                  media_id=one_data['mediaId'], media_type=one_data['type'],
+                                                  account=conta)
             records += 1
         except IntegrityError as e:
             pass
@@ -76,3 +77,18 @@ def insert_records(conta, data):
             pass
         i -= 1
     return records
+
+
+def build_url(name_account):
+    """
+    >>> name_account = 'alfareiza-3385E2'
+    >>> build_url(name_account)
+    http://4usee.com/alfareiza/3385E2
+    >>> name_account = 'tutorial'
+    >>> build_url(name_account)
+    http://tutorial.4yousee.com.br
+    """
+    if '-' in name_account:
+        return f"http://4usee.com/{name_account.split('-')[0]}/{name_account.split('-')[1]}"
+    else:
+        return f"http://{name_account.split('-')[0]}.4yousee.com.br"
