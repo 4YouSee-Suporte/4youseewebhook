@@ -1,13 +1,13 @@
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 import json
 
 # Create your views here.
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from webhook.base.models import Account
-from webhook.base.resources.tools import download_gz, process_file, bytes_to_dict, name_of_account, insert_records, \
-    build_url
+from webhook.base.resources.tools import *
 
 
 @csrf_exempt
@@ -16,30 +16,31 @@ def home(request):
     if request.method == 'POST':
         content = bytes_to_dict(request.body)
         data_response = json.dumps(content, indent=2)
-        print(data_response)
+        print(content)
         file = download_gz(content['url'])
         data = process_file(file)
         if data:
             name_account = name_of_account(content['url'])
             try:
-                # Se a conta consultada existe no banco a atribuição não da erro
                 conta = Account.objects.get(name__contains=name_account.split('-')[0].capitalize())
                 records = insert_records(conta, data)
             except Account.DoesNotExist:
-                # se a conta não existe, é criado um registro de conta no bd
                 conta = Account.objects.create(name=name_account.split('-')[0].capitalize(),
-                                               url=build_url(name_account))
+                                               url=build_url(name_account), token=None)
                 records = insert_records(conta, data)
             except Exception as e:
                 print('Error: ', e)
-            return HttpResponse(
-                f'{records} Registros inseridos com sucesso! na conta {conta.name}')
+            return HttpResponseRedirect(reverse('base:home'))
         else:
-            return HttpResponse(
-                f"Conta: {name_of_account(content['url']).capitalize()}\n"
-                f"Sem dados no intervalo :\n\t{content['filter']['startDate']} - {content['filter']['endDate']}"
-                f"\n\t{content['filter']['startTime']} - {content['filter']['endTime']}\n\tPlayers: {content['filter']['playerId']}\n\tConteúdos: {content['filter']['mediaId']}")
-    else:
-        # print(request.__dict__)
-        # registro = Register.objects.all().order_by('date', 'time')
-        return render(request, 'base/index.html', context={'contas': Account.objects.all()})
+            return render(request, 'base/index.html', context={'contas': Account.objects.all(),
+                                                               'no_info': {
+                                                                   'conta': name_of_account(
+                                                                       content['url']).capitalize(),
+                                                                   'interval_date': f"{content['filter']['startDate']} - {content['filter']['endDate']}",
+                                                                   'interval_time': f"{content['filter']['startTime']} - {content['filter']['endTime']}",
+                                                                   'players': content['filter']['playerId'],
+                                                                   'medias': content['filter']['mediaId']
+                                                               }
+                                                               }
+                          )
+    return render(request, 'base/index.html', context={'contas': Account.objects.all(), })
