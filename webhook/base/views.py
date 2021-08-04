@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 import json
 
@@ -26,11 +26,11 @@ def home(request):
                 records = insert_records(conta, data)
             except Account.DoesNotExist:
                 conta = Account.objects.create(name=name_account.split('-')[0].capitalize(),
-                                               url=build_url(name_account), token=None)
+                                               url=build_url(name_account))
                 records = insert_records(conta, data)
             except Exception as e:
                 print('Error: ', e)
-            return HttpResponseRedirect(reverse('base:home'))
+            return HttpResponse(reverse('base:home'))
         else:
             return render(request, 'base/index.html', context={'contas': Account.objects.all(),
                                                                'no_info': {
@@ -44,3 +44,4 @@ def home(request):
                                                                }
                           )
     return render(request, 'base/index.html', context={'contas': Account.objects.all(), })
+
