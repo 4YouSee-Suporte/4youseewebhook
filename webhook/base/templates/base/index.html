@@ -17,6 +17,7 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+{% load filter_extras %}
 {% with active="active" show="show" true="true" false="false"%}
 {% block header %}
 {% include 'base/header.html' %}
@@ -25,6 +26,7 @@
     {% block messages %}
     {% include 'base/messages.html' %}
     {% endblock %}
+
     {% if contas %}
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         {% for conta in contas %}
@@ -45,39 +47,56 @@
             <div class="mt-2">
                 <p class="lead">{{ conta.records.all|length }} Playlogs</p>
             </div>
-            <table class="table table-hover table-bordered table-sm">
-                <thead class="thead-light">
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Player</th>
-                    <th scope="col">Media</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Conta</th>
-                </tr>
-                </thead>
-                {% for record in conta.records.all %}
-                <tbody>
-                <tr>
-                    <td>{{ record.date|date:"d-m-Y" }}</td>
-                    <td>{{ record.time|time:"h:i:s a" }}</td>
-                    <td>{{ record.player_id }}</td>
-                    <td>{{ record.media_id }}</td>
-                    <td>{{ record.media_type }}</td>
-                    <td>{{ record.nickname }}</td>
-                </tr>
-                </tbody>
-                {% endfor %}
-            </table>
+            {% for records_by_day in conta.records.all|group_by_day %}
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+                    <a href="#!" {% if not forloop.first %}class="collapsed"{% endif %} data-toggle="collapse"
+                       data-target="#collapse{{ forloop.counter|num_to_word|title }}" aria-expanded="true"
+                                            aria-controls="collapse{{ forloop.counter|num_to_word|title }}">
+                    <div class="card-header" id="heading{{ forloop.counter|num_to_word|title }}">
+                        <h6 class="mb-0">{{ records_by_day|length }} Playlogs, {{ records_by_day.0.date|date:"d M Y" }}</h6>
+                    </div>
+                    </a>
+                    <div id="collapse{{ forloop.counter|num_to_word|title }}" class="card-body collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter|num_to_word|title }}"
+                         data-parent="#accordionExample">
+                        <table class="table table-hover table-bordered table-sm">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">Player</th>
+                                <th scope="col">Media</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Conta</th>
+                            </tr>
+                            </thead>
+                            {% for record_of_day in records_by_day %}
+                            <tbody>
+                            <tr>
+                                <td>{{ record_of_day.date|date:"d-m-Y" }}</td>
+                                <td>{{ record_of_day.time|time:"h:i:s a" }}</td>
+                                <td>{{ record_of_day.player_id }}</td>
+                                <td>{{ record_of_day.media_id }}</td>
+                                <td>{{ record_of_day.media_type }}</td>
+                                <td>{{ record_of_day.nickname }}</td>
+                            </tr>
+                            </tbody>
+                            {% endfor %} <!-- endfor record_of_day -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor %} <!-- endfor records_by_day -->
             {% else %}
             <p>Não há logs de operações registrados.</p>
             {% endif %}
         </div>
-        {% endfor %}
+        {% endfor %}<!-- endfor contas -->
     </div>
     {% else %}
-    <div class="text-center"> <h4 class="display-5">Não há informação para mostrar.</h4></div>
+    <div class="text-center"><h4 class="display-5">Não há informação para mostrar.</h4></div>
     {% endif %}
+
 </div>
 {% endwith %}
 </body>
