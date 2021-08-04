@@ -11,6 +11,7 @@ python-decouple = "*"
 dj-database-url = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
+num2words = "*"
 
 [dev-packages]
 
