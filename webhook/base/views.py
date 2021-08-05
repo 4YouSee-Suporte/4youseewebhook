@@ -32,7 +32,7 @@ def home(request):
                 print('Error: ', e)
             return HttpResponse(reverse('base:home'))
         else:
-            return render(request, 'base/index.html', context={'contas': Account.objects.all(),
+            return render(request, 'base/playlogs.html', context={'contas': Account.objects.all(),
                                                                'no_info': {
                                                                    'conta': name_of_account(
                                                                        content['url']).capitalize(),
@@ -43,5 +43,5 @@ def home(request):
                                                                }
                                                                }
                           )
-    return render(request, 'base/index.html', context={'contas': Account.objects.all(), })
+    return render(request, 'base/playlogs.html', context={'contas': Account.objects.all(), })
 
