@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="author" , content="Alfareiza">
+    <meta charset="description" , content="Webhook 4yousee">
+    <meta name="description" content="Webhook 4yousee able to receive data from 4yousee manager using his api.">
+    <title>WebHook 4YouSee</title>
+    <!-- 1. BOOTSTRAP v4.0.0         CSS !-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- 2. GOOGLE JQUERY JS v3.2.1  JS !-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- 3. BOOTSTRAP v4.0.0         JS !-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+{% include 'base/header.html' %}
+<div class="col-md-8 offset-md-2 mt-5 mb-3">
+    {% block content %}{% endblock content %}
+</div>
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
+
+</body>
+</html>
