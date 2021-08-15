@@ -1,6 +1,6 @@
 import gzip
 import io
-
+import re
 import requests
 from django.db import IntegrityError
 
@@ -44,13 +44,19 @@ def download_gz(url):
 
 def name_of_account(url):
     """
-    Recebe o nome da conta que vem do relatório e retorna o nome só.
+    Recebe a url que possui o nome da conta que vem do relatório e retorna o nome só.
     reconhece ele se vem com o formato 'name' ou 'name-token'
     param: 'https://4yousee-playlogs-reports.s3.amazonaws.com/alfareiza-3385E2/158591-6102de52c5e5f.gz': str
     return: 'alfareiza-3385E2': str
     """
-    if url:
+    if 'playlogs-reports' in url:
         return (url.split('/')[3])
+
+    if '4yousee.com' in url:
+        return re.findall('(\w+).4yousee.com', url)[0].capitalize()
+
+    if '4usee.com' in url:
+        return url.split('4usee.com')[1].split('/')[1].capitalize()
 
 
 def insert_records(conta, data):
@@ -92,3 +98,27 @@ def build_url(name_account):
         return f"http://4usee.com/{name_account.split('-')[0]}/{name_account.split('-')[1]}"
     else:
         return f"http://{name_account.split('-')[0]}.4yousee.com.br"
+
+
+def enterprise_or_self(url):
+    """
+    Essa função recebe a url da conta e retorna 'enterprise' ou 'self' caso possua o formato correto.
+    Caso não retorna um False
+    param: str: url
+    return: str: 'enterprise' 'self'
+     >>> url = 'http://4usee.com/alfareiza/3385E2'
+     >>> enterprise_or_self(url)
+     'self'
+     >>> url = 'http://tutorial.4yousee.com.br'
+     >>> enterprise_or_self(url)
+     'enterprise'
+     >>> url = 'tutorial.4usee.com'
+     >>> enterprise_or_self(url)
+     False
+     """
+    if re.match('(http:\/\/|https:\/\/)?(\w+)\.4yousee\.com(\.br)?/?', url):
+        return 'enterprise'
+    elif re.match('(http:\/\/|https:\/\/)?4usee\.com\/[a-zA-Z]+\/(\w+)/?', url):
+        return 'self'
+    else:
+        return False
