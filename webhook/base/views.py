@@ -6,7 +6,7 @@ import json
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from webhook.base.models import Account
+from webhook.manager.models import Account
 from webhook.base.resources.tools import *
 
 
@@ -24,24 +24,19 @@ def home(request):
             try:
                 conta = Account.objects.get(name__contains=name_account.split('-')[0].capitalize())
                 records = insert_records(conta, data)
-            except Account.DoesNotExist:
-                conta = Account.objects.create(name=name_account.split('-')[0].capitalize(),
-                                               url=build_url(name_account))
-                records = insert_records(conta, data)
             except Exception as e:
                 print('Error: ', e)
             return HttpResponse(reverse('base:home'))
         else:
             return render(request, 'base/playlogs.html', context={'contas': Account.objects.all(),
-                                                               'no_info': {
-                                                                   'conta': name_of_account(
-                                                                       content['url']).capitalize(),
-                                                                   'interval_date': f"{content['filter']['startDate']} - {content['filter']['endDate']}",
-                                                                   'interval_time': f"{content['filter']['startTime']} - {content['filter']['endTime']}",
-                                                                   'players': content['filter']['playerId'],
-                                                                   'medias': content['filter']['mediaId']
-                                                               }
-                                                               }
+                                                                  'no_info': {
+                                                                      'conta': name_of_account(
+                                                                          content['url']).capitalize(),
+                                                                      'interval_date': f"{content['filter']['startDate']} - {content['filter']['endDate']}",
+                                                                      'interval_time': f"{content['filter']['startTime']} - {content['filter']['endTime']}",
+                                                                      'players': content['filter']['playerId'],
+                                                                      'medias': content['filter']['mediaId']
+                                                                  }
+                                                                  }
                           )
     return render(request, 'base/playlogs.html', context={'contas': Account.objects.all(), })
-
