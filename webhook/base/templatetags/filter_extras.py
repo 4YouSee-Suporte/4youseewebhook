@@ -1,3 +1,5 @@
+import datetime
+
 from django import template
 import itertools
 
@@ -23,3 +25,16 @@ def group_by_day(list_all_objects):
 @register.filter
 def num_to_word(num):
     return num2words(num)
+
+
+@register.filter
+def date_from_minute(m):
+    """
+    Calc date from minutes and return a string with the date.
+    :param minutes: 351702: int
+    :return: 'Jan 25 de 2021 15:44'
+    """
+    if m is not None:
+        now = datetime.datetime.utcnow()
+        deltadate = now - datetime.timedelta(minutes=m)
+        return deltadate.strftime("%d %b %Y %H:%M")
