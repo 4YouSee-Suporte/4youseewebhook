@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'webhook.base'
+    'webhook.base',
+    'webhook.manager'
 ]
 
 MIDDLEWARE = [
@@ -85,7 +86,6 @@ default_db_url = f'sqlite:///{BASE_DIR}/db.sqlite3'
 parse_database = partial(dj_database_url.parse, conn_max_age=600)
 
 DATABASES = {'default': config('DATABASE_URL', default=default_db_url, cast=parse_database)}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
