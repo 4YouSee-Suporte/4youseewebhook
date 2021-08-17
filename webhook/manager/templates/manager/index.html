@@ -25,28 +25,73 @@
 </form>
 
 
+{% include 'manager/confirm_delete_modal.html' %}
+
+
 {% if contas %}
-<h4 class="mt-3">Contas</h4>
-<hr>
+<div class="mt-4 d-flex align-items-center">
+    <div class="mt-2 mr-auto p-2">
+        <h4 class="">Contas</h4>
+    </div>
+</div>
+<hr class="mt-0">
 <div class="row">
     {% for conta in contas %}
-    <div class="col-sm-6 mb-3">
+    <div class="col-sm-4 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ conta }}</h5>
-                <p class="card-text mb-0">Playlogs: {{ conta.records.all|length }}</p>
-                <p class="card-text mb-0">Players: {{ conta.players.all|length }}</p>
-                <p class="card-text mb-0">Playlists: {{ conta.playlists.all|length }}</p>
-                <p class="card-text mb-0">Conteúdos: {{ conta.medias.all|length }}</p>
-                <p class="card-text">Categorias: {{ conta.categories.all|length }}</p>
-                <a href="{{ conta.get_absolute_url }}" class="btn btn-primary">Ver Mais</a>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">{{ conta }}</h5>
+                    </div>
+                    <div>
+                        <a href="{% url 'manager:delete' conta.slug %}"
+                           class="confirm-delete btn btn-danger mr-1 btn-sm"
+                           data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{conta.slug}}">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                {% if conta.records.all|length and conta.players.all|length and conta.medias.all|length %}
+                <div>
+                    <p class="card-text mb-0">Playlogs: {{ conta.records.all|length }}</p>
+                    <p class="card-text mb-0">Players: {{ conta.players.all|length }}</p>
+                    <p class="card-text mb-0">Playlists: {{ conta.playlists.all|length }}</p>
+                    <p class="card-text mb-0">Conteúdos: {{ conta.medias.all|length }}</p>
+                    <p class="card-text">Categorias: {{ conta.categories.all|length }}</p>
+                </div>
+                {% else %}
+                <div class="mt-2 mb-4 text-center">
+                    <p class="lead">Sem Informações</p>
+                </div>
+                {% endif %}
+                <div class="d-flex justify-content-end mt-2">
+                    <a href="{{ conta.get_absolute_url }}" class="btn btn-primary btn-sm">Ver Mais</a>
+                </div>
             </div>
+
         </div>
     </div>
-    {% endfor %}
+    {% endfor %} <!-- endfor contas -->
 </div>
 {% else %}
 <hr>
 <div class="text-center"><h4 class="display-5">Não há contas registradas</h4></div>
 {% endif %}
 {% endblock content %}
+
+{% block javascripts %}
+<script>
+        $(document).on('click', '.confirm-delete', function () {
+          $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
+        });
+
+        $(document).on('click', '#confirmDeleteButtonModal', function () {
+          var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
+          window.location = $("#".concat(caller)).attr("href");
+        });
+
+
+</script>
+{% endblock javascripts %}
+
