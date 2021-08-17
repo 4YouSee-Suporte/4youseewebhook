@@ -32,7 +32,8 @@ def home(request):
 
 def conta(request, slug):
     conta = get_object_or_404(Account, slug=slug)
-    total_records = len(conta.categories.all()) + len(conta.playlists.all()) + len(conta.players.all()) + len(conta.medias.all())
+    total_records = len(conta.categories.all()) + len(conta.playlists.all()) + len(conta.players.all()) + len(
+        conta.medias.all())
     ctx = {'conta': conta, 'total_records': total_records}
     return render(request, 'manager/conta.html', ctx)
 
@@ -45,7 +46,8 @@ def update_all_data_account(request, slug):
     update_or_insert_medias(conta, account.medias)
     update_or_insert_playlists(conta, account.playlists)
     update_or_insert_players(conta, account.players)
-    return redirect(conta)  # By passing some object to redirect(); that object’s get_absolute_url() method will be called to figure out the redirect URL
+    return redirect(
+        conta)  # By passing some object to redirect(); that object’s get_absolute_url() method will be called to figure out the redirect URL
 
 
 def update_players(request, slug):
@@ -78,3 +80,9 @@ def update_medias(request, slug):
     account.get_medias()
     update_or_insert_medias(conta, account.medias)
     return redirect(conta)
+
+
+def delete(request, slug):
+    conta = Account.objects.get(slug=slug)
+    conta.delete()
+    return HttpResponseRedirect(reverse('manager:home'))
