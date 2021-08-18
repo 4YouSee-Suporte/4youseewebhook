@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-
+{% load filter_extras %}
 {% block content %}
 <h4 class="mt-5">Adicionar Conta</h4>
 <hr>
@@ -52,7 +52,7 @@
                         </a>
                     </div>
                 </div>
-                {% if conta.records.all|length and conta.players.all|length and conta.medias.all|length %}
+                {% if conta|all_records %}
                 <div>
                     <p class="card-text mb-0">Playlogs: {{ conta.records.all|length }}</p>
                     <p class="card-text mb-0">Players: {{ conta.players.all|length }}</p>
