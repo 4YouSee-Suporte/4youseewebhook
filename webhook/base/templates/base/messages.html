@@ -1,13 +1,10 @@
-{% if no_info %}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    <strong>Atenção!</strong> Não foram recebidos dados com o seguinte filtro:<br>
-    <p><strong>Conta: </strong>{{ no_info.conta }}</p>
-    <p><strong>Datas: </strong>{{ no_info.interval_date }}</p>
-    <p><strong>Horários: </strong>{{ no_info.interval_time }}</p>
-    {% if no_info.players %}<p><strong>Players: </strong>{{ no_info.players }}</p>{% endif %}
-    {% if no_info.medias %}<p><strong>Conteúdos: </strong>{{ no_info.medias }}</p>{% endif %}
+{% for message in messages %}
+<div class="container-fluid p-0">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
 </div>
-{% endif %}
+{% endfor %}
