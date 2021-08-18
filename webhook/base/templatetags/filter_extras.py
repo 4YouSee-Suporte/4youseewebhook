@@ -38,3 +38,10 @@ def date_from_minute(m):
         now = datetime.datetime.utcnow()
         deltadate = now - datetime.timedelta(minutes=m)
         return deltadate.strftime("%d %b %Y %H:%M")
+
+
+@register.filter
+def all_records(conta):
+    qty = len(conta.categories.all()) + len(conta.players.all()) + len(conta.playlists.all()) \
+          + len(conta.medias.all())
+    return qty
