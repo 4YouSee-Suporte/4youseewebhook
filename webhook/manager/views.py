@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -15,6 +16,7 @@ from webhook.manager.models import Account
 from webhook.manager.scripts.update_data import DataManager
 
 
+@login_required
 def home(request):
     if request.method == 'POST':
         form = ContaNovaForm(request.POST)
@@ -31,6 +33,7 @@ def home(request):
     return render(request, 'manager/index.html', {'contas': contas})
 
 
+@login_required
 def conta(request, slug):
     conta = get_object_or_404(Account, slug=slug)
     ctx = {'conta': conta, 'total_records': qty_all_records(conta)}
