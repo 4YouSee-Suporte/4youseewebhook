@@ -1,84 +1,91 @@
 {% extends 'base/base.html' %}
 {% load filter_extras %}
+
 {% block content %}
-<h4 class="mt-5">Adicionar Conta</h4>
-<hr>
-<form action="{% url 'manager:home' %}" method="post">
-    {% csrf_token %}
-    <div class="row g-3 align-items-top">
-        <div class="col-sm-5">
-            <div>
-                <input name="url" type="text" class="form-control" placeholder="URL da Conta" aria-label="URL da Conta">
-            </div>
-            <small class="form-text text-muted">{{ form.errors.url }}</small>
-        </div>
-        <div class="col-sm-5">
-            <div>
-                <input name="token" type="text" class="form-control" placeholder="Token" aria-label="Token">
-            </div>
-            <small class="form-text text-muted">{{ form.errors.token }}</small>
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Adicionar</button>
-        </div>
-    </div>
-</form>
-
-
-{% include 'manager/confirm_delete_modal.html' %}
-
-
-{% if contas %}
-<div class="mt-4 d-flex align-items-center">
-    <div class="mt-2 mr-auto p-2">
-        <h4 class="">Contas</h4>
-    </div>
-</div>
-<hr class="mt-0">
-<div class="row">
-    {% for conta in contas %}
-    <div class="col-sm-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">{{ conta }}</h5>
-                    </div>
-                    <div>
-                        <a href="{% url 'manager:delete' conta.slug %}"
-                           class="confirm-delete btn btn-danger mr-1 btn-sm"
-                           data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{conta.slug}}">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </div>
-                </div>
-                {% if conta|all_records %}
+{% include 'base/header.html' %}
+<div class="col-md-8 offset-md-2 mt-5 mb-3">
+    {% include 'base/messages.html' %}
+    <h4 class="mt-5">Adicionar Conta</h4>
+    <hr>
+    <form action="{% url 'manager:home' %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3 align-items-top">
+            <div class="col-sm-5">
                 <div>
-                    <p class="card-text mb-0">Playlogs: {{ conta.records.all|length }}</p>
-                    <p class="card-text mb-0">Players: {{ conta.players.all|length }}</p>
-                    <p class="card-text mb-0">Playlists: {{ conta.playlists.all|length }}</p>
-                    <p class="card-text mb-0">Conteúdos: {{ conta.medias.all|length }}</p>
-                    <p class="card-text">Categorias: {{ conta.categories.all|length }}</p>
+                    <input name="url" type="text" class="form-control" placeholder="URL da Conta"
+                           aria-label="URL da Conta">
                 </div>
-                {% else %}
-                <div class="mt-2 mb-4 text-center">
-                    <p class="lead">Sem Informações</p>
-                </div>
-                {% endif %}
-                <div class="d-flex justify-content-end mt-2">
-                    <a href="{{ conta.get_absolute_url }}" class="btn btn-primary btn-sm">Ver Mais</a>
-                </div>
+                <small class="form-text text-muted">{{ form.errors.url }}</small>
             </div>
+            <div class="col-sm-5">
+                <div>
+                    <input name="token" type="text" class="form-control" placeholder="Token" aria-label="Token">
+                </div>
+                <small class="form-text text-muted">{{ form.errors.token }}</small>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Adicionar</button>
+            </div>
+        </div>
+    </form>
 
+
+    {% include 'manager/confirm_delete_modal.html' %}
+
+
+    {% if contas %}
+    <div class="mt-4 d-flex align-items-center">
+        <div class="mt-2 mr-auto p-2">
+            <h4 class="">Contas</h4>
         </div>
     </div>
-    {% endfor %} <!-- endfor contas -->
+    <hr class="mt-0">
+    <div class="row">
+        {% for conta in contas %}
+        <div class="col-sm-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">{{ conta }}</h5>
+                        </div>
+                        <div>
+                            <a href="{% url 'manager:delete' conta.slug %}"
+                               class="confirm-delete btn btn-danger mr-1 btn-sm"
+                               data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{conta.slug}}">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% if conta|all_records %}
+                    <div>
+                        <p class="card-text mb-0">Playlogs: {{ conta.records.all|length }}</p>
+                        <p class="card-text mb-0">Players: {{ conta.players.all|length }}</p>
+                        <p class="card-text mb-0">Playlists: {{ conta.playlists.all|length }}</p>
+                        <p class="card-text mb-0">Conteúdos: {{ conta.medias.all|length }}</p>
+                        <p class="card-text">Categorias: {{ conta.categories.all|length }}</p>
+                    </div>
+                    {% else %}
+                    <div class="mt-2 mb-4 text-center">
+                        <p class="lead">Sem Informações</p>
+                    </div>
+                    {% endif %}
+                    <div class="d-flex justify-content-end mt-2">
+                        <a href="{{ conta.get_absolute_url }}" class="btn btn-primary btn-sm">Ver Mais</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %} <!-- endfor contas -->
+    </div>
+    {% else %}
+    <hr>
+    <div class="text-center"><h4 class="display-5">Não há contas registradas</h4></div>
+    {% endif %}
 </div>
-{% else %}
-<hr>
-<div class="text-center"><h4 class="display-5">Não há contas registradas</h4></div>
-{% endif %}
 {% endblock content %}
+
 
 {% block javascripts %}
 <script>
@@ -90,6 +97,7 @@
           var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
           window.location = $("#".concat(caller)).attr("href");
         });
+
 
 
 </script>
