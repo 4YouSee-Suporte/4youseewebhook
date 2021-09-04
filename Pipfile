@@ -12,6 +12,9 @@ dj-database-url = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
 num2words = "*"
+pytest = "*"
+pytest-django = "*"
+model-bakery = "*"
 
 [dev-packages]
 
