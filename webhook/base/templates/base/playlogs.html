@@ -1,12 +1,16 @@
 {% extends "base/base.html" %}
+{% load filter_extras %}
+
 
 {% block content %}
-{% load filter_extras %}
-{% with active="active" show="show" true="true" false="false" %}
+{% include 'base/header.html' %}
+<div class="col-md-8 offset-md-2 mt-5 mb-3">
 
-{% block messages %}
-{% include 'base/messages.html' %}
-{% endblock %}
+    {% with active="active" show="show" true="true" false="false" %}
+
+    {% block messages %}
+    {% include 'base/messages.html' %}
+    {% endblock %}
 
     {% if contas %}
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -35,7 +39,8 @@
                        data-target="#collapse{{ forloop.counter|num_to_word|title }}" aria-expanded="true"
                        aria-controls="collapse{{ forloop.counter|num_to_word|title }}">
                         <div class="card-header" id="heading{{ forloop.counter|num_to_word|title }}">
-                            <h6 class="mb-0">{{ records_by_day|length }} Playlogs, {{ records_by_day.0.date|date:"d M Y" }}</h6>
+                            <h6 class="mb-0">{{ records_by_day|length }} Playlogs, {{ records_by_day.0.date|date:"d M Y"
+                                }}</h6>
                         </div>
                     </a>
                     <div id="collapse{{ forloop.counter|num_to_word|title }}"
@@ -82,5 +87,5 @@
     {% endif %}
 
     {% endwith %}
-
+</div>
 {% endblock content %}
