@@ -33,6 +33,20 @@ DEBUG = config('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = ['*']
 
+LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = '/manager/'
+
+LOGOUT_REDIRECT_URL = '/'
+
+# Recovery Password
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 MESSAGE_TAGS = {
@@ -46,13 +60,13 @@ MESSAGE_TAGS = {
 # Application definition
 
 INSTALLED_APPS = [
+    'webhook.base',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'webhook.base',
     'webhook.manager'
 ]
 
@@ -118,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
