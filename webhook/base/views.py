@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 import json
@@ -10,6 +11,7 @@ from webhook.manager.models import Account
 from webhook.base.resources.tools import *
 
 
+@login_required
 @csrf_exempt
 def home(request):
     data = None
