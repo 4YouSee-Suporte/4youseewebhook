@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+{% load i18n static %}
+
+{% load filter_extras %}
+
+{% block title %}{% translate 'Log in' %} WebHook{% endblock %}
+
+{% block content %}
+<main class="d-flex justify-content-center mt-5 mb-3 text-center">
+    <form method="post" class="p-5 border rounded" action="{% url 'login' %}">
+        {% csrf_token %}
+        <h1 class="h3 mb-4">WebHook<strong>4YouSee</strong></h1>
+
+        {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
+
+        {% if next %}
+        {% if user.is_authenticated %}
+        <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+        {% else %}
+        <p>Please login to see this page.</p>
+        {% endif %}
+        {% endif %}
+
+        <div class="pb-4 pt-4">
+            <input type="text" class="form-control" id="floatingInput" placeholder="Username"
+                   name="{{ form.username.name }}">
+        </div>
+        <div class="">
+            <input type="password" class="form-control" id="togglePassword" placeholder="Password"
+                   name="{{ form.password.name }}">
+        </div>
+        <p class="mb-4 text-muted"><a href="{% url 'password_reset' %}">{% translate 'Forgotten your password or username?' %}</a></p>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">{% translate 'Log in' %}</button>
+        <p class="mt-5 mb-3 text-muted">&copy; {% now 'Y' %}</p>
+    </form>
+
+</main>
+{% endblock %}
