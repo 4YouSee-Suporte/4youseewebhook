@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+{% load filter_extras %}
+
+
+{% block content %}
+{% include 'base/header.html' %}
+<div class="col-md-8 offset-md-2 mt-5 mb-3">
+    {% include 'base/messages.html' %}
+    <h4 class="mt-5">Solicitar Relatório</h4>
+    <hr>
+    <form action="{% url 'base:solicitar_relatorio' %}" method="post">
+        {% csrf_token %}
+        <div class="form-inline d-flex justify-content-around">
+            <div>
+                <div class="form-group mx-sm-3"> <!-- Contas Button -->
+                    <label for="inputConta" class="sr-only">Conta</label>
+                    <select class="form-control" name="{{ form.conta.name }}" id="{{ form.conta.id }}">
+                        <option selected>Selecionar conta</option>
+                        {% for conta in contas.all %}
+                        <option value="{{ conta.name|lower }}">{{ conta.name|title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group mx-sm-3">
+                <label for="inputStartdate" class="sr-only">startDate</label>
+                <h5 class="mr-2 lead">Desde</h5>
+                <input type="date" name="{{ form.startdate.name }}" class="form-control">
+            </div>
+            <div class="form-group mx-sm-3">
+                <label for="inputendDate" class="sr-only">endDate</label>
+                <h5 class="mr-2 lead">Até</h5>
+                <input type="date" name="{{ form.enddate.name }}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Solicitar</button>
+        </div>
+        <div class="d-flex justify-content-around">
+            <small class="form-text text-muted w-25 text-danger">{{ form.errors.conta.as_text }}</small>
+            <small class="form-text text-muted w-25 text-danger">{{ form.errors.startdate.as_text }}</small>
+            <small class="form-text text-muted w-25 text-danger">{{ form.errors.enddate.as_text }}</small>
+            <small class="form-text text-muted"></small>
+        </div>
+    </form>
+
+    {% if not contas.all %}
+    <div class="text-center">
+        <p class="mt-5 lead">Lembre-se que antes de solicitar relatórios você precisa adicionar sua(s) conta(s)</p>
+        <a href="{% url 'manager:home' %}"><p class="mb-5 lead h6"><small>Adicionar Contas</small></p></a>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
