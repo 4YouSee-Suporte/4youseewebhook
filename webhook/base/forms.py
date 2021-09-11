@@ -1,12 +1,12 @@
 from django import forms
-from django.forms import ModelForm
-
-from webhook.base.models import Register
+from webhook.manager.models import Account
 
 
-class RegisterForm(ModelForm):
-    class Meta:
-        model = Register
-        widgets = {
-            'date':  forms.DateInput(format='%d-%m-%Y'),
-        }
+class RelatorioForm(forms.Form):
+    """
+   Este formulário vai tratar aa solicitação de relatórios.
+   """
+    contas = Account.objects.all()
+    conta = forms.ChoiceField(choices=list(map(lambda x: (x.slug, x.name), contas)))
+    startdate = forms.DateField()
+    enddate = forms.DateField()
