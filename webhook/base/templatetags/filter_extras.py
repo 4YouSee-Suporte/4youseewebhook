@@ -1,8 +1,6 @@
 import datetime
-
 from django import template
 import itertools
-
 from num2words import num2words
 
 register = template.Library()
@@ -43,5 +41,23 @@ def date_from_minute(m):
 @register.filter
 def all_records(conta):
     qty = len(conta.categories.all()) + len(conta.players.all()) + len(conta.playlists.all()) \
-          + len(conta.medias.all())
+          + len(conta.medias.all()) + len(conta.records.all())
     return qty
+
+
+@register.filter
+def player_full_name(id, conta):
+    try:
+        return (player := conta.players.get(player_id=id))
+    except Exception as e:
+        print('Error: ', e)
+        return f"{id}"
+
+
+@register.filter
+def media_full_name(id, conta):
+    try:
+        return (media := conta.medias.get(media_id=id))
+    except Exception as e:
+        print('Error: ', e)
+        return f"{id}"
