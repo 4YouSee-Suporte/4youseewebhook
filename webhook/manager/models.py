@@ -14,7 +14,7 @@ class Account(models.Model):
         return f"{self.name}"
 
     def get_absolute_url(self):
-        return reverse('manager:conta', kwargs={'slug': self.slug})
+        return reverse('manager:conta_detalhe', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['-date_added']
