@@ -39,8 +39,7 @@
                        data-target="#collapse{{ forloop.counter|num_to_word|title }}" aria-expanded="true"
                        aria-controls="collapse{{ forloop.counter|num_to_word|title }}">
                         <div class="card-header" id="heading{{ forloop.counter|num_to_word|title }}">
-                            <h6 class="mb-0">{{ records_by_day|length }} Playlogs, {{ records_by_day.0.date|date:"d M Y"
-                                }}</h6>
+                            <h6 class="mb-0">{{ records_by_day|length }} Playlogs, {{ records_by_day.0.date|date:"d M Y" }}</h6>
                         </div>
                     </a>
                     <div id="collapse{{ forloop.counter|num_to_word|title }}"
