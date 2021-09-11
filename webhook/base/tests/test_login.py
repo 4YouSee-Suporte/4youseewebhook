@@ -55,7 +55,7 @@ def resp_home_com_usuario_logado(client_com_usuario_logado, db):
     :param db:
     :return:
     """
-    return client_com_usuario_logado.get(reverse('base:home'))
+    return client_com_usuario_logado.get(reverse('manager:home'))
 
 
 def test_botao_salir_disponivel(resp_home_com_usuario_logado):
