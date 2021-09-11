@@ -34,10 +34,10 @@ def home(request):
 
 
 @login_required
-def conta(request, slug):
+def conta_detalhe(request, slug):
     conta = get_object_or_404(Account, slug=slug)
     ctx = {'conta': conta, 'total_records': qty_all_records(conta)}
-    return render(request, 'manager/conta.html', ctx)
+    return render(request, 'manager/conta_detalhe.html', ctx)
 
 
 def update_all_data_account(request, slug):
@@ -65,8 +65,8 @@ def update_all_data_account(request, slug):
         update_or_insert_players(conta, account.players)
 
     messages.error(request, msg)
-    return redirect(
-        conta)  # By passing some object to redirect(); that object’s get_absolute_url() method will be called to figure out the redirect URL
+    # By passing some object to redirect(); that object’s get_absolute_url() method will be called to figure out the redirect URL
+    return redirect(conta)
 
 
 def update_players(request, slug):
