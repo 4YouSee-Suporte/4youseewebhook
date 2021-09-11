@@ -5,5 +5,6 @@ from webhook.base import views
 app_name = 'base'
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('playlogs/', views.playlogs, name='playlogs'),
+    path('relatorio/', views.solicitar_relatorio, name='solicitar_relatorio')
 ]
