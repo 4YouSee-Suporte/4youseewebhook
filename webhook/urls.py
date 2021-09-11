@@ -20,5 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('django.contrib.auth.urls')),  # localhost/login
     path('', include('webhook.base.urls')),
-    path('manager/', include('webhook.manager.urls'))
+    path('', include('webhook.manager.urls'))
 ]
