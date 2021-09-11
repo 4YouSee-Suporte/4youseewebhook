@@ -6,7 +6,7 @@ app_name = 'manager'
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('<slug:slug>/', views.conta, name='conta'),
+    path('<slug:slug>/', views.conta_detalhe, name='conta_detalhe'),
 
     # Atualiza os recusos da conta
     path(r'update/<slug:slug>/all', views.update_all_data_account, name='update_data_account'),
