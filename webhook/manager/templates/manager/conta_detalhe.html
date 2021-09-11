@@ -49,6 +49,11 @@
                role="tab" aria-controls="medias" aria-selected="false">Conteúdos</a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" id="playlogs-tab" data-toggle="tab" href="#playlogs"
+               role="tab" aria-controls="playlogs" aria-selected="false">Playlogs</a>
+        </li>
+
     </ul>
 
 
@@ -89,7 +94,7 @@
                     <td>{{ player.lastContactInMinutes|date_from_minute|default_if_none:'' }}</td>
                     <td>{{ player.group_id }} - {{ player.group_name }}</td>
                     <!--<td>{{ player.status_id }} - {{ player.status_name }}</td>-->
-                    <td>{{ player.lastLogReceived|default_if_none:'' }}</td>
+                    <td>{{ player.lastLogReceived|date:"j M Y H:i"|default_if_none:'' }}</td>
                 </tr>
                 </tbody>
                 {% endfor %} <!-- conta.players.all -->
@@ -212,7 +217,7 @@
                     <td>{{ media }}</td>
                     <td>{{ media.file }}</td>
                     <td>{{ media.durationInSeconds }}s</td>
-                    <td>{{ media.startDate|default_if_none:'' }} - {{ media.endDate|default_if_none:'' }}</td>
+                    <td>{{ media.startDate|date:"j M Y"|default_if_none:'' }} - {{ media.endDate|date:"j M Y"|default_if_none:'' }}</td>
                     <td>
                         {% for category in media.category.all %}
                         {{ category.name }},
@@ -225,6 +230,72 @@
             {% else %}
             <div class="text-center">
                 <p class="mt-5 mb-5 lead">Não há conteúdos registrados.</p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="tab-pane fade" id="playlogs" role="tabpanel" aria-labelledby="playlogs-tab">
+            <!-- playlogs content -->
+            {% if conta.records.all %}
+            <div class="d-flex bd-highlight">
+                <div class="mt-2 mr-auto p-2 bd-highlight">
+                    <p class="lead">{{ conta.records.all|length }} Playlogs</p>
+                </div>
+                <div class="p-2 bd-highlight">
+                    <a href="{% url 'base:solicitar_relatorio' %}">
+                        <button type="button" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-arrow-clockwise"></i> Solicitar Relatórios
+                        </button>
+                    </a>
+                </div>
+            </div>
+            {% for records_by_day in conta.records.all|group_by_day %}
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+
+                    <a href="#!" {% if not forloop.first %}class="collapsed" {% endif %} data-toggle="collapse"
+                       data-target="#collapse{{ forloop.counter|num_to_word|title }}" aria-expanded="true"
+                       aria-controls="collapse{{ forloop.counter|num_to_word|title }}">
+                        <div class="card-header" id="heading{{ forloop.counter|num_to_word|title }}">
+                            <h6 class="mb-0">{{ records_by_day|length }} Playlogs, {{ records_by_day.0.date|date:"d M Y" }}</h6>
+                        </div>
+                    </a>
+                    <div id="collapse{{ forloop.counter|num_to_word|title }}"
+                         class="card-body collapse {% if forloop.first %}show{% endif %}"
+                         aria-labelledby="heading{{ forloop.counter|num_to_word|title }}"
+                         data-parent="#accordionExample">
+                        <table class="table table-hover table-bordered table-sm">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">Player</th>
+                                <th scope="col">Media</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Conta</th>
+                            </tr>
+                            </thead>
+                            {% for record_of_day in records_by_day %}
+                            <tbody>
+                            <tr>
+                                <td>{{ record_of_day.date|date:"d-m-Y" }}</td>
+                                <td>{{ record_of_day.time|time:"h:i:s a" }}</td>
+                                <td>{{ record_of_day.player_id|player_full_name:conta }}</td>
+                                <td>{{ record_of_day.media_id|media_full_name:conta }}</td>
+                                <td>{{ record_of_day.media_type }}</td>
+                                <td>{{ record_of_day.nickname }}</td>
+                            </tr>
+                            </tbody>
+                            {% endfor %} <!-- endfor record_of_day -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor %} <!-- endfor records_by_day -->
+            {% else %}
+            <div class="text-center">
+                <p class="mt-5 mb-0 lead">Não há playlogs.</p>
+                <a href="{% url 'base:solicitar_relatorio' %}"><p class="mb-5 lead h6"><small>Solicitar
+                    Relatório</small></p></a>
             </div>
             {% endif %}
         </div>
