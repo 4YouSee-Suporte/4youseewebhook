@@ -1,12 +1,13 @@
 <h1 align="center" >
     4YouSee Webhook <br>
-    <img alt="GitHub stars" src="https://img.shields.io/github/stars/4YouSee-Suporte/4youseewebhook?style=social">
     <img alt="GitHub followers" src="https://img.shields.io/github/followers/4YouSee-Suporte?label=Follow%20me%20%3A%29&style=social">
 </h1>
 
-<h3>⚈ Sobre este Projeto'</h3>
+<h3>⚈ Sobre este Projeto</h3>
 
-Aplicativo web que permite adicionar várias contas para que dessa forma seja possível obter os dados dessas contas num lugar só.
+Aplicação web desenvolvida em framework Django usando linguagem de programação Python. Nele é possível é possível adicionar várias contas para que dessa forma seja possível obter os dados delas num lugar só. Desta forma fica centralizado o gerenciamento e monitoramento de várias contas.
+
+Você pode acessar na conta a partir dessa rota https://webhook-4uc.herokuapp.com. Pode solicitar o usuário e senha ao e-mail suporte@4yousee.com.br o seguir os seguintes passos para rodar o projeto no seu computador.
 
 
 <h3>⚈ Requisitos</h3>
@@ -75,6 +76,14 @@ Pip, Python instalados e configurados como variáveis de ambiente.
     ```
     python manage.py migrate
     ```
+    
+5. Criando super usuário.
+
+    O super usuário é necessário porque o projeto precisa de um usuário que consiga ter todas as permissões. A primeira funcionalidade do super user é criar outros usuários. Para criar ele basta executar a seguinte na linha de comando:
+    
+    ```
+    python manage.py createsuperuser
+    ```
 
 <hr>
 
@@ -86,7 +95,7 @@ Para rodar o projeto basta com executar a seguinte linha no terminal, lembrando 
     
 <hr>
 
-<:h3>⚈ Features </h3>
+<h3>⚈ Features </h3>
 
 <h4> Paths </h4>
 
